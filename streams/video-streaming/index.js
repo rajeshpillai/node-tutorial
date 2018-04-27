@@ -30,7 +30,8 @@ app.get('/videos/:videoName', (req, res, next) => {
       the next set of bytes are requested.
     */
     const { range } = req.headers;
-    console.log(`range-> ${range}`)
+
+    console.log(`Range = ${range}`);
 
     // Grab the file size
     const { size } = stats;
@@ -38,18 +39,16 @@ app.get('/videos/:videoName', (req, res, next) => {
     // Get the start value and convert to number
     // RANGE Format: range: bytes=0-100 -> 0 is start and 100 is end
     const positions = (range || '').replace(/bytes=/, '').split('-');
-    console.log('positions: ', positions);
     const start = Number(positions[0]);
     const end = positions[1] ? parsetInt(positions[1],10) :  size - 1;
 
-    console.log(`start-${start}, end-${end}`);
-
+    console.log(`Start = ${start}, End = ${end}`);
         
     // Calculate the amount of bits that we will sent back
     // to the browser
-
     const chunkSize = (end - start) + 1;
-    console.log(`chunksize=${chunkSize}`);
+
+    console.log(`Chunk Size:  ${chunkSize}`);
 
     // Create the response header
     res.set({
